@@ -1,4 +1,4 @@
-package entity;
+package com.csa.entity;
 
 public class Result {
 
