@@ -29,9 +29,9 @@ public class MatchUtil {
 	
 	public static Match getMatchInfoFromFile(File filePath){
 	
+		Match m = new Match();
 		
-		
-		return null;
+		return m;
 	}
 	
 	
