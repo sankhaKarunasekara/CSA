@@ -30,6 +30,7 @@ public class MatchUtil {
 	public static Match getMatchInfoFromFile(File filePath){
 	
 		Match m = new Match();
+                System.out.println(filePath);
 		
 		return m;
 	}
