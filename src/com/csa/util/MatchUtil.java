@@ -3,6 +3,9 @@ package com.csa.util;
 import java.io.File;
 
 import com.csa.entity.Match;
+import com.esotericsoftware.yamlbeans.YamlReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 /**
  * @author sankha
@@ -27,9 +30,10 @@ public class MatchUtil {
 	}
 	
 	
-	public static Match getMatchInfoFromFile(File filePath){
+	public static Match getMatchInfoFromFile(File filePath) throws FileNotFoundException{
 	
 		Match m = new Match();
+                YamlReader reader = new YamlReader(new FileReader(filePath));
                 System.out.println(filePath);
 		
 		return m;
