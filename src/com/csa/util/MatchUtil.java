@@ -1,5 +1,6 @@
 package com.csa.util;
 
+import com.csa.entity.Innings;
 import java.io.File;
 
 import com.csa.entity.Match;
@@ -76,6 +77,10 @@ public class MatchUtil {
         m.setMatchDate(date);
         
         m.setVenue((String) info.get("venue"));
+        
+        
+        Innings firstInnings= new Innings();
+        m.setFirstInnings(null);
         
 		return m;
 	}
