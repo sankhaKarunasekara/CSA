@@ -9,6 +9,7 @@ import com.csa.entity.Bowl;
 import com.csa.entity.Innings;
 import java.io.File;
 import com.csa.entity.Match;
+import com.csa.entity.Result;
 import com.csa.entity.Team;
 import com.csa.entity.Wicket;
 import com.esotericsoftware.yamlbeans.YamlException;
@@ -78,6 +79,17 @@ public Match getMatchInfoFromFile(File filePath) throws FileNotFoundException, Y
         m.setMatchDate(date);
         
         m.setVenue((String) info.get("venue"));
+        
+        
+        
+        Map outcome = (Map) info.get("outcome");
+        String winner= (String) outcome.get("winner");
+        //System.out.println("winner"+outcome.get("winner"));
+        
+        Map by= (Map) outcome.get("by");
+        String by_which = (String) by.keySet().toArray()[0];
+        int by_amount= Integer.parseInt((String) by.get(by_which));
+        System.out.println("keyset"+by_amount);
         //end of extracting basic match info
         
         HashMap<String,Integer> extraMap = new HashMap<>();
@@ -154,7 +166,22 @@ public Match getMatchInfoFromFile(File filePath) throws FileNotFoundException, Y
         
         
         
+        Result r = new Result();
+        //r.setDLmethod(true); //don't know how to find this
+        //r.setMatchId(); //which  ID ?? 
+        r.setWinningTeam(winner);
+        if(winner.equals(battingTeam.teamName))
+            r.setWonByFirstBatOrSecondBat(1);
+        else
+            r.setWonByFirstBatOrSecondBat(2);
         
+        if(by_which.equals("runs"))
+            r.setWonByRuns(by_amount);
+        else
+            r.setWonByWickets(by_amount);
+        
+        
+        m.setResult(r);
         
         
         
