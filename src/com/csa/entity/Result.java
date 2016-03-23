@@ -1,8 +1,15 @@
 package com.csa.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Result {
 
-	int matchId;
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	int resultmanId;
 	String winningTeam;
 	int wonByFirstBatOrSecondBat;
 	boolean isDLmethod;
@@ -11,14 +18,6 @@ public class Result {
 	
 	String plyerOfTheMatch; 
 	
-	public int getMatchId() {
-		return matchId;
-	}
-
-	public void setMatchId(int matchId) {
-		this.matchId = matchId;
-	}
-
 	public String getWinningTeam() {
 		return winningTeam;
 	}

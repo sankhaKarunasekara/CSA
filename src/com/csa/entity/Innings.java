@@ -1,14 +1,44 @@
 package com.csa.entity;
 
+import java.util.HashMap;
+
 import java.util.Map;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
 public class Innings {
 
-	public Team battingTeam;
-	public Team fieldingTeam;
-	public int numberOfOvers;
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	private int InningsId;
 	
-	public Map<Integer,Bowl> deliveries; 
+	@AttributeOverrides({
+		@AttributeOverride(name="teamId", column=@Column(name="tea")),
+		@AttributeOverride(name="teamName", column=@Column(name="tem")),
+		@AttributeOverride(name="captain", column=@Column(name="cap")),
+		@AttributeOverride(name="wicketKeper", column=@Column(name="wick"))
+	})
+	@OneToOne
+	private Team battingTeam;
+	
+	@OneToOne
+	private Team fieldingTeam;
+	private int numberOfOvers;
+	
+	@ElementCollection
+	private Map<Integer,Bowl> deliveries =  new HashMap<Integer, Bowl>(); 
+	
 	
 	public Innings() {
 		// TODO Auto-generated constructor stub

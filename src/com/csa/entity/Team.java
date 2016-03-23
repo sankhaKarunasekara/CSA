@@ -2,12 +2,22 @@ package com.csa.entity;
 
 import java.util.Map;
 
-public class Team {
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class Team {
+	
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	public int teamId;
 	public String teamName;
 	public String captain;
 	public String wicketKeper;
+	
+	@ElementCollection
 	public Map<Integer,String> Playing11;  
 	
 	public Team() {

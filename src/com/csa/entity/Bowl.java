@@ -1,9 +1,18 @@
 package com.csa.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+@Entity
 public class Bowl {
 
-	public String bowler;
+	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	public int bowlId;
 	
+	public String bowler;
 	public int overNumber;
 	public int bowlnumber;
 	public int ligitBowlnumber;
@@ -18,6 +27,7 @@ public class Bowl {
 	public int totalRuns;
 	public int isWicket;
 	
+	@OneToOne 
 	public Wicket wicket;
 	
 	public Bowl() {
