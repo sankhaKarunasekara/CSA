@@ -2,6 +2,7 @@ package com.csa.entity;
 
 import java.util.ArrayList;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +21,7 @@ public class Wicket {
 	private String bowler;
 	private String batsman;
 	private String wicketType;
-	
+
 	private ArrayList<String> fielder = new ArrayList<String>();
 
 	public Wicket() {

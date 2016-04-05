@@ -17,7 +17,10 @@ import com.csa.entity.Result;
 import com.csa.entity.Team;
 import com.csa.entity.Wicket;
 import com.csa.util.MatchUtil;
+import com.csa.util.PlayerUtil;
+import com.csa.visualization.BatsmansInning;
 import com.esotericsoftware.yamlbeans.YamlException;
+import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 
 public class Main {
 
@@ -38,93 +41,158 @@ public class Main {
 		// match.setFirstInnings(innings1);
 		// match.setSecondInnings(innings2);
 
-		File file = new File("resources/ipl/335982.yaml");
-
-		MatchDetails match;
-
-		Innings innings1;
-		Innings innings2;
-
-		// need to change, unnecessary
-		Team battingTeam1;
-		Team fieldingTeam1;
-
-		Team battingTeam2;
-		Team fieldingTeam2;
-
-		Bowl bowl;
-		Wicket wicket;
-
-		Result result;
-
 		SessionFactory sessionFactory = new Configuration().configure()
 				.buildSessionFactory();
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
 
-		try {
-			match = MatchUtil.getMatchInfoFromFile(file);
+		for (int j = 335982; j <= 829823; j++) {
+			String filepath = "resources/ipl/" + j + ".yaml";
 
-			innings1 = match.getFirstInnings();
-			innings2 = match.getSecondInnings();
+			File file = null;
+			try {
+				switch (j) {
 
-			battingTeam1 = innings1.getBattingTeam();
-			fieldingTeam1 = innings1.getFieldingTeam();
-
-			battingTeam2 = innings2.getBattingTeam();
-			fieldingTeam2 = innings2.getFieldingTeam();
-
-			session.save(match);
-
-			session.save(innings1);
-			session.save(innings2);
-
-			session.save(battingTeam1);
-			session.save(fieldingTeam1);
-
-			session.save(battingTeam2);
-			session.save(fieldingTeam2);
-
-			Map<Integer, Bowl> firstInningsDeliveries = innings1
-					.getDeliveries();
-			Map<Integer, Bowl> secondInningsDeliveries = innings2
-					.getDeliveries();
-
-			for (int i = 0; i < firstInningsDeliveries.size(); i++) {
-				bowl = firstInningsDeliveries.get(i);
-				System.out.println(bowl.bowlnumber);
-				session.save(bowl);
-				
-				wicket = bowl.getWicket();
-				if (bowl.isWicket == 1) {
-					session.save(wicket);
+				case 336041: {
+					j = 392181;
+					continue;
 				}
-			}
-
-			for (int i = 0; i < secondInningsDeliveries.size(); i++) {
-				bowl = secondInningsDeliveries.get(i);
-				session.save(bowl);
-				System.out.println(bowl.bowlnumber);
-
-				wicket = bowl.getWicket();
-				if (bowl.isWicket == 1) {
-					session.save(wicket);
+				case 392240: {
+					j = 419106;
+					continue;
 				}
+				case 419166: {
+					j = 501198;
+					continue;
+				}
+				case 501272: {
+					j = 548306;
+					continue;
+				}
+				case 548382: {
+					j = 597998;
+					continue;
+				}
+				case 598074: {
+					j = 729279;
+					continue;
+				}
+				case 734050: {
+					j = 829705;
+					continue;
+				}
+				default:
+					file = new File(filepath);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			MatchDetails match;
 
-			result = match.getResult();
-			session.save(result);
-			session.getTransaction().commit();
+			Innings innings1;
+			Innings innings2;
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (YamlException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// need to change, unnecessary
+			Team battingTeam1;
+			Team fieldingTeam1;
+
+			Team battingTeam2;
+			Team fieldingTeam2;
+
+			Bowl bowl;
+			Wicket wicket;
+
+			Result result;
+			HashMap<Integer, BatsmansInning> allBattingInnings;
+			BatsmansInning battingInnings;
+			session.beginTransaction();
+
+			try {
+				match = MatchUtil.getMatchInfoFromFile(file);
+
+				innings1 = match.getFirstInnings();
+				innings2 = match.getSecondInnings();
+
+				battingTeam1 = innings1.getBattingTeam();
+				fieldingTeam1 = innings1.getFieldingTeam();
+
+				battingTeam2 = innings2.getBattingTeam();
+				fieldingTeam2 = innings2.getFieldingTeam();
+
+				session.save(match);
+
+				session.save(innings1);
+				session.save(innings2);
+
+				session.save(battingTeam1);
+				session.save(fieldingTeam1);
+
+				session.save(battingTeam2);
+				session.save(fieldingTeam2);
+
+				Map<Integer, Bowl> firstInningsDeliveries = innings1
+						.getDeliveries();
+				Map<Integer, Bowl> secondInningsDeliveries = innings2
+						.getDeliveries();
+
+				for (int i = 0; i < firstInningsDeliveries.size(); i++) {
+					bowl = firstInningsDeliveries.get(i);
+					System.out.println(bowl.bowlnumber);
+					session.save(bowl);
+
+					wicket = bowl.getWicket();
+					if (bowl.isWicket == 1) {
+						session.save(wicket);
+					}
+				}
+
+				for (int i = 0; i < secondInningsDeliveries.size(); i++) {
+					bowl = secondInningsDeliveries.get(i);
+					session.save(bowl);
+					System.out.println(bowl.bowlnumber);
+
+					wicket = bowl.getWicket();
+					if (bowl.isWicket == 1) {
+						session.save(wicket);
+					}
+				}
+
+				result = match.getResult();
+				session.save(result);
+
+				// visualization
+				allBattingInnings = PlayerUtil.getScoreCardDetailsFirstInnings(match);
+
+				for (int i = 1; i < allBattingInnings.size(); i++) {
+				//for (int i = 1; i < 2; i++) {
+					battingInnings = allBattingInnings.get(i);
+					session.save(battingInnings);
+				}
+
+				// visualization
+				allBattingInnings = PlayerUtil.getScoreCardDetailsSecondInnings(match);
+
+				for (int i = 1; i < allBattingInnings.size(); i++) {
+				//for (int i = 1; i < 2; i++) {
+					battingInnings = allBattingInnings.get(i);
+					session.save(battingInnings);
+				}
+
+				session.getTransaction().commit();
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (YamlException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 		}
+		session.close();
+		sessionFactory.close();
 	}
 }

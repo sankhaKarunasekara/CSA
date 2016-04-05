@@ -2,6 +2,7 @@ package com.csa.entity;
 
 import java.util.HashMap;
 
+
 import java.util.Map;
 
 import javax.persistence.AttributeOverride;
@@ -34,6 +35,7 @@ public class Innings {
 	
 	@OneToOne
 	private Team fieldingTeam;
+	
 	private int numberOfOvers;
 	
 	@ElementCollection

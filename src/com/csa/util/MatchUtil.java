@@ -227,5 +227,4 @@ public class MatchUtil {
 		}
 		return inni1_deli;
 	}
-
 }
