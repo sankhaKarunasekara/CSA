@@ -30,16 +30,17 @@ public class PlayerUtil {
 			batsmanName = bowlDetails.getBatsman();
 			runs = bowlDetails.getRuns();
 
-			if (map.containsKey(batsmanName)) {
-				map.get(batsmanName).add(runs);
+			if (!map.containsKey(batsmanName)) {
 				// for new batsman
-			} else {
 				battingOrder.add(batsmanName);
 				ArrayList<Integer> temp = new ArrayList<Integer>();
 				temp.add(runs);
 				map.put(batsmanName, temp);
+			} else {
+				map.get(batsmanName).add(runs);
 			}
 		}
+
 		HashMap<Integer, BatsmansInning> returnMap = new HashMap<>();
 		int i = 1;
 		for (String name : battingOrder) {
@@ -67,14 +68,21 @@ public class PlayerUtil {
 			batsman.setFirstInningsOrSecondInnings(1);
 
 			batsman.setNumberOfBowlsTaken(batsmanBowlByBowlScore.size());
-
-			batsman.setFirstBatOrSecondBatWin(match.getResult()
-					.getWonByFirstBatOrSecondBat());
+			// for first innings
+			int side = match.getResult().getWonByFirstBatOrSecondBat();
+			// team 1 wins
+			if (side == 1) {
+				batsman.setWinOrLoss("win");
+			} else if (side == 2) {
+				batsman.setWinOrLoss("loss");
+			} else {
+				batsman.setWinOrLoss("draw");
+			}
 
 			returnMap.put(i, batsman);
 			i++;
 		}
-
+		System.out.println("batting Order: " + battingOrder.toString());
 		return returnMap;
 	}
 
@@ -100,14 +108,14 @@ public class PlayerUtil {
 			batsmanName = bowlDetails.getBatsman();
 			runs = bowlDetails.getRuns();
 
-			if (map.containsKey(batsmanName)) {
-				map.get(batsmanName).add(runs);
+			if (!map.containsKey(batsmanName)) {
 				// for new batsman
-			} else {
 				battingOrder.add(batsmanName);
 				ArrayList<Integer> temp = new ArrayList<Integer>();
 				temp.add(runs);
 				map.put(batsmanName, temp);
+			} else {
+				map.get(batsmanName).add(runs);
 			}
 		}
 		HashMap<Integer, BatsmansInning> returnMap = new HashMap<>();
@@ -138,8 +146,16 @@ public class PlayerUtil {
 
 			batsman.setFirstInningsOrSecondInnings(2);
 
-			batsman.setFirstBatOrSecondBatWin(match.getResult()
-					.getWonByFirstBatOrSecondBat());
+			// for first innings
+			int side = match.getResult().getWonByFirstBatOrSecondBat();
+			// team 1 wins
+			if (side == 2) {
+				batsman.setWinOrLoss("win");
+			} else if (side == 1) {
+				batsman.setWinOrLoss("loss");
+			} else {
+				batsman.setWinOrLoss("draw");
+			}
 
 			returnMap.put(i, batsman);
 			i++;
@@ -187,5 +203,4 @@ public class PlayerUtil {
 
 		return count;
 	}
-
 }

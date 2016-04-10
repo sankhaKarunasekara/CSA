@@ -160,19 +160,21 @@ public class Main {
 				session.save(result);
 
 				// visualization
-				allBattingInnings = PlayerUtil.getScoreCardDetailsFirstInnings(match);
+				allBattingInnings = PlayerUtil
+						.getScoreCardDetailsFirstInnings(match);
 
-				for (int i = 1; i < allBattingInnings.size(); i++) {
-				//for (int i = 1; i < 2; i++) {
+				for (int i = 1; i <= allBattingInnings.size(); i++) {
+					// for (int i = 1; i < 2; i++) {
 					battingInnings = allBattingInnings.get(i);
 					session.save(battingInnings);
 				}
 
 				// visualization
-				allBattingInnings = PlayerUtil.getScoreCardDetailsSecondInnings(match);
+				allBattingInnings = PlayerUtil
+						.getScoreCardDetailsSecondInnings(match);
 
-				for (int i = 1; i < allBattingInnings.size(); i++) {
-				//for (int i = 1; i < 2; i++) {
+				for (int i = 1; i <= allBattingInnings.size(); i++) {
+					// for (int i = 1; i < 2; i++) {
 					battingInnings = allBattingInnings.get(i);
 					session.save(battingInnings);
 				}

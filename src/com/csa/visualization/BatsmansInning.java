@@ -28,12 +28,20 @@ public class BatsmansInning {
 	int numberOfBoundries;
 	int numberOfSixes;
 	int firstInningsOrSecondInnings;
-	int firstBatOrSecondBatWin;
+	String winOrLoss;
 
 	// ArrayList<Integer> bowlByBowlScore = new ArrayList<Integer>();
 
 	public int getBattingInningsId() {
 		return battingInningsId;
+	}
+
+	public String getWinOrLoss() {
+		return winOrLoss;
+	}
+
+	public void setWinOrLoss(String winOrLoss) {
+		this.winOrLoss = winOrLoss;
 	}
 
 	public int getFirstInningsOrSecondInnings() {
@@ -48,13 +56,7 @@ public class BatsmansInning {
 		this.battingInningsId = battingInningsId;
 	}
 
-	public int getFirstBatOrSecondBatWin() {
-		return firstBatOrSecondBatWin;
-	}
-
-	public void setFirstBatOrSecondBatWin(int firstBatOrSecondBatWin) {
-		this.firstBatOrSecondBatWin = firstBatOrSecondBatWin;
-	}
+	
 
 	public int getMatchId() {
 		return matchId;
