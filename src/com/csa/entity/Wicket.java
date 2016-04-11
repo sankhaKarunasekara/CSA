@@ -12,12 +12,10 @@ import javax.persistence.Id;
 @Entity
 public class Wicket {
 
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int wicketId;
-	
-	
 	private int wicketNumber;
-	
 	private String bowler;
 	private String batsman;
 	private String wicketType;

@@ -16,9 +16,11 @@ import com.csa.entity.MatchDetails;
 import com.csa.entity.Result;
 import com.csa.entity.Team;
 import com.csa.entity.Wicket;
+import com.csa.util.InningsUtil;
 import com.csa.util.MatchUtil;
 import com.csa.util.PlayerUtil;
 import com.csa.visualization.BatsmansInning;
+import com.csa.visualization.InningByInningsResults;
 import com.esotericsoftware.yamlbeans.YamlException;
 import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
 
@@ -102,7 +104,11 @@ public class Main {
 			Wicket wicket;
 
 			Result result;
+			
+			//visualization
 			HashMap<Integer, BatsmansInning> allBattingInnings;
+			
+			InningByInningsResults inningResults;
 			BatsmansInning battingInnings;
 			session.beginTransaction();
 
@@ -162,7 +168,7 @@ public class Main {
 				// visualization
 				allBattingInnings = PlayerUtil
 						.getScoreCardDetailsFirstInnings(match);
-
+						
 				for (int i = 1; i <= allBattingInnings.size(); i++) {
 					// for (int i = 1; i < 2; i++) {
 					battingInnings = allBattingInnings.get(i);
@@ -178,7 +184,13 @@ public class Main {
 					battingInnings = allBattingInnings.get(i);
 					session.save(battingInnings);
 				}
-
+				//innings Results visualization
+				inningResults = InningsUtil.generateInningsByInningsResultsFirstInnings(match);
+				session.save(inningResults);
+				
+				inningResults = InningsUtil.generateInningsByInningsResultsSecondInnings(match);
+				session.save(inningResults);
+				
 				session.getTransaction().commit();
 
 			} catch (FileNotFoundException e) {

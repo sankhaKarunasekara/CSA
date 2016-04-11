@@ -45,7 +45,7 @@ public class MatchUtil {
 
 	public static MatchDetails getMatchInfoFromFile(File filePath)
 			throws FileNotFoundException, YamlException, ParseException {
-		MatchDetails m = new MatchDetails();
+		MatchDetails match = new MatchDetails();
 
 		YamlReader reader = new YamlReader(new FileReader(filePath));
 
@@ -59,21 +59,21 @@ public class MatchUtil {
 
 		ArrayList<String> teams = (ArrayList<String>) info.get("teams");
 		System.out.println(info.get("teams"));
-		m.setTeamOne(teams.get(0));
-		m.setTeamTwo(teams.get(1));
+		match.setTeamOne(teams.get(0));
+		match.setTeamTwo(teams.get(1));
 
 		ArrayList<String> umpires = (ArrayList<String>) info.get("umpires");
 		System.out.println(umpires);
-		m.setUmprie1(umpires.get(0));
-		m.setUmprie2(umpires.get(1));
+		match.setUmprie1(umpires.get(0));
+		match.setUmprie2(umpires.get(1));
 
 		Map toss = (Map) info.get("toss");
 		System.out.println((String) toss.get("winner"));
-		m.setTossWinningTeam((String) toss.get("winner"));
-		m.setTossDecision((String) toss.get("decision"));
+		match.setTossWinningTeam((String) toss.get("winner"));
+		match.setTossDecision((String) toss.get("decision"));
 
 		System.out.println(info.get("city"));
-		m.setCity((String) info.get("city"));
+		match.setCity((String) info.get("city"));
 
 		// System.err.println(info.get("dates"));
 		ArrayList<String> dates = (ArrayList<String>) info.get("dates");
@@ -81,9 +81,9 @@ public class MatchUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String dateInString = dates.get(0);
 		Date date = sdf.parse(dateInString);
-		m.setMatchDate(date);
+		match.setMatchDate(date);
 
-		m.setVenue((String) info.get("venue"));
+		match.setVenue((String) info.get("venue"));
 
 		Map outcome = (Map) info.get("outcome");
 		String winner = (String) outcome.get("winner");
@@ -127,39 +127,49 @@ public class MatchUtil {
 		firstInnings.setFieldingTeam(fieldingTeam);
 
 		firstInnings.setDeliveries(inni1_deli);
+
+		// set the Number of Wickets lost in the innings
+		int numOfWicketsLostInFirstInnings = getNumberOfWicketInInnings(inni1_deli);
+		firstInnings.setNumberOfWickets(numOfWicketsLostInFirstInnings);
+
 		int inni1_numberOfOvers = 0; // don't know how to find this
 		firstInnings.setNumberOfOvers(inni1_numberOfOvers);
 
-		m.setFirstInnings(firstInnings);
+		match.setFirstInnings(firstInnings);
 
 		Innings secondInnings = new Innings();
 
 		secondInnings.setBattingTeam(fieldingTeam);
 		secondInnings.setFieldingTeam(battingTeam);
 		secondInnings.setDeliveries(inni2_deli);
-		int inni2_numberOfOvers = 0; // don't know how to find this
-		secondInnings.setNumberOfOvers(inni2_numberOfOvers);
 
-		m.setSecondInnings(secondInnings);
+		// set the Number of Wickets lost in the innings
+		int numOfWicketsLostInSecondInnings = getNumberOfWicketInInnings(inni2_deli);
+		secondInnings.setNumberOfWickets(numOfWicketsLostInSecondInnings);
 
-		Result r = new Result();
+		int numOfOversInSecondInnings = 0; // don't know how to find this
+		secondInnings.setNumberOfOvers(numOfOversInSecondInnings);
+
+		match.setSecondInnings(secondInnings);
+
+		Result result = new Result();
 		// r.setDLmethod(true); //don't know how to find this
 		// r.setMatchId(); //which ID ??
-		r.setWinningTeam(winner);
+		result.setWinningTeam(winner);
 		if (winner.equals(battingTeam.teamName))
-			r.setWonByFirstBatOrSecondBat(1);
+			result.setWonByFirstBatOrSecondBat(1);
 		else
-			r.setWonByFirstBatOrSecondBat(2);
+			result.setWonByFirstBatOrSecondBat(2);
 
 		if (by_which.equals("runs"))
-			r.setWonByRuns(by_amount);
+			result.setWonByRuns(by_amount);
 		else
-			r.setWonByWickets(by_amount);
+			result.setWonByWickets(by_amount);
 
-		m.setResult(r);
+		match.setResult(result);
 
 		// return match object
-		return m;
+		return match;
 	}
 
 	public static HashMap<Integer, Bowl> getDeliveriesinfo(Map inn1_info) {
@@ -208,23 +218,40 @@ public class MatchUtil {
 				@SuppressWarnings("unchecked")
 				ArrayList<String> fielders = (ArrayList<String>) wicket_map
 						.get("fielders");
-				
+
 				String kind = (String) wicket_map.get("kind");
 
 				inni1_wicketNumber++;
-				Wicket w = new Wicket();
-				w.setWicketNumber(inni1_wicketNumber);
-				w.setBowler((String) delivery.get("bowler"));
-				w.setBatsman(player_out);
-				w.setFielder(fielders);
-				w.setWicketType(kind);
+				Wicket wicket = new Wicket();
+				wicket.setWicketNumber(inni1_wicketNumber);
+				wicket.setBowler((String) delivery.get("bowler"));
+				wicket.setBatsman(player_out);
+				wicket.setFielder(fielders);
+				wicket.setWicketType(kind);
 
 				b.setIsWicket(1); // boolean or int;
-				b.setWicket(w);
+				b.setWicket(wicket);
 			}
 
 			inni1_deli.put(i, b);
 		}
 		return inni1_deli;
+	}
+
+	/**
+	 * @param diliveries
+	 * @return number of wickets in an Inning
+	 */
+
+	public static int getNumberOfWicketInInnings(Map<Integer, Bowl> diliveries) {
+		int maxWicketNumber = 0;
+		for (int i = 1; i < diliveries.size(); i++) {
+			Bowl bowl = diliveries.get(i);
+
+			if (bowl.getIsWicket() == 1) {
+				maxWicketNumber++;
+			}
+		}
+		return maxWicketNumber;
 	}
 }

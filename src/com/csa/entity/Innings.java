@@ -41,6 +41,7 @@ public class Innings {
 	@ElementCollection
 	private Map<Integer,Bowl> deliveries =  new HashMap<Integer, Bowl>(); 
 	
+	private int numberOfWickets;
 	
 	public Innings() {
 		// TODO Auto-generated constructor stub
@@ -101,5 +102,13 @@ public class Innings {
     public void setDeliveries(Map<Integer,Bowl> deliveries) {
         this.deliveries = deliveries;
     }
+
+	public int getNumberOfWickets() {
+		return numberOfWickets;
+	}
+
+	public void setNumberOfWickets(int numberOfWickets) {
+		this.numberOfWickets = numberOfWickets;
+	}
 
 }
