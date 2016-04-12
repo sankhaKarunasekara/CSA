@@ -23,7 +23,7 @@ public class PlayerUtil {
 
 		String batsmanName;
 		Integer runs;
-		for (int i = 0; i < numberOfDeliveries; i++) {
+		for (int i = 1; i <= numberOfDeliveries; i++) {
 
 			// get the bowlDetails
 			bowlDetails = match.getFirstInnings().getDeliveries().get(i);
@@ -101,7 +101,7 @@ public class PlayerUtil {
 
 		String batsmanName;
 		Integer runs;
-		for (int i = 0; i < numberOfDeliveries; i++) {
+		for (int i = 1; i <= numberOfDeliveries; i++) {
 
 			// get the bowlDetails
 			bowlDetails = match.getSecondInnings().getDeliveries().get(i);

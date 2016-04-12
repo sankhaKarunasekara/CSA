@@ -33,8 +33,43 @@ public class InningByInningsResults {
 	Double avgPressureFactor; // runs/dot ball number+1
 	Double dotBowlPrerentage;
 	int numberOfWicketsLost;
-
+	Double sixHittingFrequency;
+	Double fourHittingFrequency;
+	Double BoundaryRunsPresentage;
+	Double dotBowlToRunsRatio;
 	String winOrLoss;
+
+	public Double getSixHittingFrequency() {
+		return sixHittingFrequency;
+	}
+
+	public void setSixHittingFrequency(Double sixHittingFrequency) {
+		this.sixHittingFrequency = sixHittingFrequency;
+	}
+
+	public Double getFourHittingFrequency() {
+		return fourHittingFrequency;
+	}
+
+	public void setFourHittingFrequency(Double fourHittingFrequency) {
+		this.fourHittingFrequency = fourHittingFrequency;
+	}
+
+	public Double getBoundaryRunsPresentage() {
+		return BoundaryRunsPresentage;
+	}
+
+	public void setBoundaryRunsPresentage(Double boundaryRunsPresentage) {
+		BoundaryRunsPresentage = boundaryRunsPresentage;
+	}
+
+	public Double getDotBowlToRunsRatio() {
+		return dotBowlToRunsRatio;
+	}
+
+	public void setDotBowlToRunsRatio(Double dotBowlToRunsRatio) {
+		this.dotBowlToRunsRatio = dotBowlToRunsRatio;
+	}
 
 	public int getNumberOfWicketsLost() {
 		return numberOfWicketsLost;

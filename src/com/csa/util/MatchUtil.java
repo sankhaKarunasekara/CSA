@@ -132,6 +132,14 @@ public class MatchUtil {
 		int numOfWicketsLostInFirstInnings = getNumberOfWicketInInnings(inni1_deli);
 		firstInnings.setNumberOfWickets(numOfWicketsLostInFirstInnings);
 
+		// set Number of Runs Socred in an Innings
+		int numOfRunsInInn1 = getNumberOfRunsScoredInAnInnings(inni1_deli);
+		firstInnings.setNumberOfRunsScored(numOfRunsInInn1);
+
+		// set Number of Runs Extras in an Innings
+		int numOfExtrasInInn1 = getNumberOfExtrasInAnInnings(inni1_deli);
+		firstInnings.setNumberOfExtras(numOfExtrasInInn1);
+
 		int inni1_numberOfOvers = 0; // don't know how to find this
 		firstInnings.setNumberOfOvers(inni1_numberOfOvers);
 
@@ -146,6 +154,14 @@ public class MatchUtil {
 		// set the Number of Wickets lost in the innings
 		int numOfWicketsLostInSecondInnings = getNumberOfWicketInInnings(inni2_deli);
 		secondInnings.setNumberOfWickets(numOfWicketsLostInSecondInnings);
+
+		// set Number of Runs Socred in an Innings
+		int numOfRunsInInn2 = getNumberOfRunsScoredInAnInnings(inni2_deli);
+		secondInnings.setNumberOfRunsScored(numOfRunsInInn2);
+
+		// set Number of Runs Extras in an Innings
+		int numOfExtrasInInn2 = getNumberOfExtrasInAnInnings(inni2_deli);
+		secondInnings.setNumberOfExtras(numOfExtrasInInn2);
 
 		int numOfOversInSecondInnings = 0; // don't know how to find this
 		secondInnings.setNumberOfOvers(numOfOversInSecondInnings);
@@ -194,21 +210,23 @@ public class MatchUtil {
 			int total = Integer.parseInt((String) run_map.get("total"));
 			int runs = Integer.parseInt((String) run_map.get("batsman"));
 
-			Bowl b = new Bowl();
+			Bowl bowl = new Bowl();
 
-			b.setBatsman((String) delivery.get("batsman"));
-			b.setNonStriker((String) delivery.get("non_striker"));
-			b.setBowler((String) delivery.get("bowler"));
-			b.setOverNumber(overNumber);
+			bowl.setBatsman((String) delivery.get("batsman"));
+			bowl.setNonStriker((String) delivery.get("non_striker"));
+			bowl.setBowler((String) delivery.get("bowler"));
+			bowl.setOverNumber(overNumber);
 
-			b.setBowlnumber(i); // what is this ????? 3.2 or 20th ball
+			int bowlNumber = i + 1;
+			bowl.setBowlnumber(bowlNumber); // what is this ????? 3.2 or 20th
+											// ball
 
 			if (delivery.containsKey("extras"))
-				b.setExtraType(extras); // type int ??? ;for now it's string
+				bowl.setExtraType(extras); // type int ??? ;for now it's string
 
-			b.setRuns(runs);
-			b.setExtras(extras);
-			b.setTotalRuns(total);
+			bowl.setRuns(runs);
+			bowl.setExtras(extras);
+			bowl.setTotalRuns(total);
 			// runs and totoal runs ????
 
 			if (delivery.containsKey("wicket")) {
@@ -229,11 +247,11 @@ public class MatchUtil {
 				wicket.setFielder(fielders);
 				wicket.setWicketType(kind);
 
-				b.setIsWicket(1); // boolean or int;
-				b.setWicket(wicket);
+				bowl.setIsWicket(1); // boolean or int;
+				bowl.setWicket(wicket);
 			}
 
-			inni1_deli.put(i, b);
+			inni1_deli.put(bowlNumber, bowl);
 		}
 		return inni1_deli;
 	}
@@ -245,7 +263,7 @@ public class MatchUtil {
 
 	public static int getNumberOfWicketInInnings(Map<Integer, Bowl> diliveries) {
 		int maxWicketNumber = 0;
-		for (int i = 1; i < diliveries.size(); i++) {
+		for (int i = 1; i <= diliveries.size(); i++) {
 			Bowl bowl = diliveries.get(i);
 
 			if (bowl.getIsWicket() == 1) {
@@ -254,4 +272,25 @@ public class MatchUtil {
 		}
 		return maxWicketNumber;
 	}
+
+	public static int getNumberOfRunsScoredInAnInnings(
+			Map<Integer, Bowl> diliveries) {
+		int numberOfRuns = 0;
+		for (int i = 1; i <= diliveries.size(); i++) {
+			Bowl bowl = diliveries.get(i);
+			numberOfRuns = numberOfRuns + bowl.getTotalRuns();
+		}
+		return numberOfRuns;
+	}
+
+	public static int getNumberOfExtrasInAnInnings(Map<Integer, Bowl> diliveries) {
+		int numberOfExtras = 0;
+		for (int i = 1; i <= diliveries.size(); i++) {
+			Bowl bowl = diliveries.get(i);
+			numberOfExtras = numberOfExtras + bowl.getExtras();
+
+		}
+		return numberOfExtras;
+	}
+
 }

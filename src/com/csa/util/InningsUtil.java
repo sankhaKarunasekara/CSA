@@ -22,19 +22,54 @@ public class InningsUtil {
 		ArrayList<BattingSegment> segmentList = getBattingSegmentList(match
 				.getFirstInnings().getDeliveries());
 
+		// set number of batting segments
 		inningsFactorSet.setNumberOfBattingSegments(segmentList.size());
+
+		// set avg mean runs in batting segment
 		inningsFactorSet
 				.setAvgMeanRunsInBattingSegment(getMeanRunsInSegment(segmentList));
+
+		// set avg runs in batting segment
 		inningsFactorSet
 				.setAvgRunsInBattingSegment(getAvgRunsInSegment(segmentList));
+
+		// set avg pressure factor
 		inningsFactorSet
 				.setAvgPressureFactor(getAvgPressureFactor(segmentList));
 
+		// set dot bowl presentage
 		inningsFactorSet.setDotBowlPrerentage(getDotBowlPresentage(match
 				.getFirstInnings().getDeliveries()));
-		
-		//number of Wickets lost in first Innings
-		inningsFactorSet.setNumberOfWicketsLost(match.getFirstInnings().getNumberOfWickets());
+
+		// number of Wickets lost in first Innings
+		inningsFactorSet.setNumberOfWicketsLost(match.getFirstInnings()
+				.getNumberOfWickets());
+
+		// sixHittingFrequency
+		Double sixHittingFrequency = getInningsSixHittingFrequency(match
+				.getFirstInnings().getDeliveries());
+		inningsFactorSet.setSixHittingFrequency(sixHittingFrequency);
+
+		// fourHittingFrequency
+		Double fourHittingFrequency = getInningsFourHittingFrequency(match
+				.getFirstInnings().getDeliveries());
+		inningsFactorSet.setFourHittingFrequency(fourHittingFrequency);
+
+		// Boundary Percentage
+		Double boundrayPresentage = getBoundrayRunsPresentage(match
+				.getFirstInnings().getDeliveries(), match.getFirstInnings()
+				.getNumberOfRunsScored());
+		inningsFactorSet.setBoundaryRunsPresentage(boundrayPresentage);
+
+		// DotBawlToRunsRatio
+		int numberOfDots = getNumberOfdots(match.getFirstInnings()
+				.getDeliveries());
+		int inningsScore = match.getFirstInnings().getNumberOfRunsScored();
+
+		Double dotBowlToRunsRatio = getDotBowlToRunsRatio(numberOfDots,
+				inningsScore);
+
+		inningsFactorSet.setDotBowlToRunsRatio(dotBowlToRunsRatio);
 
 		// for first innings
 		int side = match.getResult().getWonByFirstBatOrSecondBat();
@@ -59,24 +94,63 @@ public class InningsUtil {
 		inningsFactorSet.setMatchId(match.getMatchId());
 		inningsFactorSet.setFirstInningsOrSecondInnings(2);
 
+		/********************************* segment list **********************************/
+
 		ArrayList<BattingSegment> segmentList = getBattingSegmentList(match
 				.getSecondInnings().getDeliveries());
 
+		// setNumber of segments
 		inningsFactorSet.setNumberOfBattingSegments(segmentList.size());
+
+		// set avgMean runs in batting segment
 		inningsFactorSet
 				.setAvgMeanRunsInBattingSegment(getMeanRunsInSegment(segmentList));
+
+		// set avg runs in segment
 		inningsFactorSet
 				.setAvgRunsInBattingSegment(getAvgRunsInSegment(segmentList));
+
+		// set avg pressure factor
 		inningsFactorSet
 				.setAvgPressureFactor(getAvgPressureFactor(segmentList));
-		// for second innings
 
+		/********************************* segment list **********************************/
+
+		// dot bowl Percentage
 		inningsFactorSet.setDotBowlPrerentage(getDotBowlPresentage(match
 				.getSecondInnings().getDeliveries()));
 
-		//numberOfWickets lost
-		inningsFactorSet.setNumberOfWicketsLost(match.getSecondInnings().getNumberOfWickets());
-		
+		// numberOfWickets lost
+		inningsFactorSet.setNumberOfWicketsLost(match.getSecondInnings()
+				.getNumberOfWickets());
+
+		// sixHittingFrequency
+		Double sixHittingFrequency = getInningsSixHittingFrequency(match
+				.getSecondInnings().getDeliveries());
+		inningsFactorSet.setSixHittingFrequency(sixHittingFrequency);
+
+		// fourHittingFrequency
+		Double fourHittingFrequency = getInningsFourHittingFrequency(match
+				.getSecondInnings().getDeliveries());
+		inningsFactorSet.setFourHittingFrequency(fourHittingFrequency);
+
+		// Boundary Percentage
+		Double boundrayPresentage = getBoundrayRunsPresentage(match
+				.getSecondInnings().getDeliveries(), match.getSecondInnings()
+				.getNumberOfRunsScored());
+		inningsFactorSet.setBoundaryRunsPresentage(boundrayPresentage);
+
+		// DotBawlToRunsRatio
+		int numberOfDots = getNumberOfdots(match.getSecondInnings()
+				.getDeliveries());
+		int inningsScore = match.getSecondInnings().getNumberOfRunsScored();
+
+		// dot bowl To runs Ratio
+		Double dotBowlToRunsRatio = getDotBowlToRunsRatio(numberOfDots,
+				inningsScore);
+		inningsFactorSet.setDotBowlToRunsRatio(dotBowlToRunsRatio);
+
+		// set the win or loose
 		int side = match.getResult().getWonByFirstBatOrSecondBat();
 
 		// team 1 wins
@@ -95,7 +169,7 @@ public class InningsUtil {
 
 		ArrayList<BattingSegment> compressSet = new ArrayList<>();
 		BattingSegment lastElement;
-		for (int i = 1; i < deliveries.size(); i++) {
+		for (int i = 1; i <= deliveries.size(); i++) {
 			if (compressSet.size() != 0) {
 				lastElement = compressSet.get(compressSet.size() - 1);
 			} else {
@@ -195,7 +269,7 @@ public class InningsUtil {
 			Map<Integer, com.csa.entity.Bowl> deliveries) {
 		int numberOfDotBowls = 0;
 		Double dotBowlPresentage = 0.0;
-		for (int i = 1; i < deliveries.size(); i++) {
+		for (int i = 1; i <= deliveries.size(); i++) {
 			Bowl bowl = deliveries.get(i);
 			if (bowl.getTotalRuns() == 0) {
 				numberOfDotBowls++;
@@ -204,6 +278,68 @@ public class InningsUtil {
 		dotBowlPresentage = numberOfDotBowls * (100.0) / deliveries.size();
 		return dotBowlPresentage;
 	}
-	
-	
+
+	public static int getNumberOfdots(
+			Map<Integer, com.csa.entity.Bowl> deliveries) {
+		int numberOfDotBowls = 0;
+		for (int i = 1; i <= deliveries.size(); i++) {
+			Bowl bowl = deliveries.get(i);
+			if (bowl.getTotalRuns() == 0) {
+				numberOfDotBowls++;
+			}
+		}
+		return numberOfDotBowls;
+	}
+
+	public static Double getInningsSixHittingFrequency(
+			Map<Integer, com.csa.entity.Bowl> deliveries) {
+		int numberOfsixes = 0;
+		Double sixesPresentage = 0.0;
+		for (int i = 1; i <= deliveries.size(); i++) {
+			Bowl bowl = deliveries.get(i);
+			if (bowl.getRuns() == 6) {
+				numberOfsixes++;
+			}
+		}
+		sixesPresentage = numberOfsixes * (100.0) / (deliveries.size() + 0.0);
+		return sixesPresentage;
+	}
+
+	public static Double getInningsFourHittingFrequency(
+			Map<Integer, com.csa.entity.Bowl> deliveries) {
+		int numberOfFours = 0;
+		Double foursPresentage = 0.0;
+		for (int i = 1; i <= deliveries.size(); i++) {
+			Bowl bowl = deliveries.get(i);
+			if (bowl.getRuns() == 4) {
+				numberOfFours++;
+			}
+		}
+		foursPresentage = numberOfFours * (100.0) / (deliveries.size() + 0.0);
+		return foursPresentage;
+	}
+
+	public static Double getBoundrayRunsPresentage(
+			Map<Integer, com.csa.entity.Bowl> deliveries, int totalNumberOfRuns) {
+		int runsFromFours = 0;
+		int runsFromSixes = 0;
+		Double boundryRunsPresentage = 0.0;
+		for (int i = 1; i <= deliveries.size(); i++) {
+			Bowl bowl = deliveries.get(i);
+			if (bowl.getRuns() == 4) {
+				runsFromFours = runsFromFours + 4;
+			} else if (bowl.getRuns() == 4) {
+				runsFromSixes = runsFromSixes + 6;
+			}
+		}
+		boundryRunsPresentage = ((runsFromSixes + runsFromFours) * (100.0))
+				/ totalNumberOfRuns;
+		return boundryRunsPresentage;
+	}
+
+	public static Double getDotBowlToRunsRatio(int numberOfDots,
+			int numberOfRuns) {
+		Double dotBowlToRunsRatio = numberOfDots / (numberOfRuns + 0.0);
+		return dotBowlToRunsRatio;
+	}
 }

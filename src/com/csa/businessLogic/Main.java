@@ -140,7 +140,7 @@ public class Main {
 				Map<Integer, Bowl> secondInningsDeliveries = innings2
 						.getDeliveries();
 
-				for (int i = 0; i < firstInningsDeliveries.size(); i++) {
+				for (int i = 1; i <= firstInningsDeliveries.size(); i++) {
 					bowl = firstInningsDeliveries.get(i);
 					System.out.println(bowl.bowlnumber);
 					session.save(bowl);
@@ -151,7 +151,7 @@ public class Main {
 					}
 				}
 
-				for (int i = 0; i < secondInningsDeliveries.size(); i++) {
+				for (int i = 1; i <= secondInningsDeliveries.size(); i++) {
 					bowl = secondInningsDeliveries.get(i);
 					session.save(bowl);
 					System.out.println(bowl.bowlnumber);
