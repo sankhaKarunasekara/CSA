@@ -12,7 +12,6 @@ public class InningByInningsResults {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	int inningsId;
 	int matchId;
-
 	int firstInningsOrSecondInnings;
 
 	// Double dotBallPresentage_1_6;
@@ -28,15 +27,38 @@ public class InningByInningsResults {
 	// Double runRate_7_15;
 	// Double runRate_16_20;
 	int numberOfBattingSegments;
+	
 	Double avgRunsInBattingSegment; // totalRuns/numberOfSegments
 	Double avgMeanRunsInBattingSegment; // (runsInTheSegment/numberOfBowls)+(runsInTheSegment/numberOfBowls)+(runsInTheSegment/numberOfBowls)...
 	Double avgPressureFactor; // runs/dot ball number+1
+	
 	Double dotBowlPrerentage;
 	int numberOfWicketsLost;
+	
 	Double sixHittingFrequency;
 	Double fourHittingFrequency;
 	Double BoundaryRunsPresentage;
 	Double dotBowlToRunsRatio;
+	Double avgPartnershipScore;
+	Double battingSegmentsToWicketsRatio;
+	
+	public Double getBattingSegmentsToWicketsRatio() {
+		return battingSegmentsToWicketsRatio;
+	}
+
+	public void setBattingSegmentsToWicketsRatio(
+			Double battingSegmentsToWicketsRatio) {
+		this.battingSegmentsToWicketsRatio = battingSegmentsToWicketsRatio;
+	}
+
+	public Double getAvgPartnershipScore() {
+		return avgPartnershipScore;
+	}
+
+	public void setAvgPartnershipScore(Double avgPartnershipScore) {
+		this.avgPartnershipScore = avgPartnershipScore;
+	}
+
 	String winOrLoss;
 
 	public Double getSixHittingFrequency() {

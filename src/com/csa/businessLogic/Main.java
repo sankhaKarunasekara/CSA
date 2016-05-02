@@ -47,7 +47,7 @@ public class Main {
 				.buildSessionFactory();
 		Session session = sessionFactory.openSession();
 
-		for (int j = 335982; j <= 829823; j++) {
+		for (int j = 335982; j <= 980915; j++) {
 			String filepath = "resources/ipl/" + j + ".yaml";
 
 			File file = null;
@@ -82,6 +82,7 @@ public class Main {
 					j = 829705;
 					continue;
 				}
+				
 				default:
 					file = new File(filepath);
 				}

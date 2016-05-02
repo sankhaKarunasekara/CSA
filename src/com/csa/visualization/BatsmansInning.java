@@ -12,7 +12,8 @@ import javax.persistence.Table;
  * @author sankha
  * 
  */
-@Entity @Table(name="AllBatsman")
+@Entity
+@Table(name = "AllBatsman")
 public class BatsmansInning {
 
 	@Id
@@ -28,9 +29,57 @@ public class BatsmansInning {
 	int numberOfBoundries;
 	int numberOfSixes;
 	int firstInningsOrSecondInnings;
+	Double averagePartnershipScore;
+
+	int strikeRate;
+
+	Double dotBowlPresentage;
+	Double pressureFactor;
+	Double avgRunsPerSegment;
+
 	String winOrLoss;
 
 	// ArrayList<Integer> bowlByBowlScore = new ArrayList<Integer>();
+
+	public Double getAveragePartnershipScore() {
+		return averagePartnershipScore;
+	}
+
+	public void setAveragePartnershipScore(Double averagePartnershipScore) {
+		this.averagePartnershipScore = averagePartnershipScore;
+	}
+
+	public int getStrikeRate() {
+		return strikeRate;
+	}
+
+	public void setStrikeRate(int strikeRate) {
+		this.strikeRate = strikeRate;
+	}
+
+	public Double getDotBowlPresentage() {
+		return dotBowlPresentage;
+	}
+
+	public void setDotBowlPresentage(Double dotBowlPresentage) {
+		this.dotBowlPresentage = dotBowlPresentage;
+	}
+
+	public Double getPressureFactor() {
+		return pressureFactor;
+	}
+
+	public void setPressureFactor(Double pressureFactor) {
+		this.pressureFactor = pressureFactor;
+	}
+
+	public Double getAvgRunsPerSegment() {
+		return avgRunsPerSegment;
+	}
+
+	public void setAvgRunsPerSegment(Double avgRunsPerSegment) {
+		this.avgRunsPerSegment = avgRunsPerSegment;
+	}
 
 	public int getBattingInningsId() {
 		return battingInningsId;
@@ -55,8 +104,6 @@ public class BatsmansInning {
 	public void setBattingInningsId(int battingInningsId) {
 		this.battingInningsId = battingInningsId;
 	}
-
-	
 
 	public int getMatchId() {
 		return matchId;

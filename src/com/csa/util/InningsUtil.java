@@ -1,11 +1,13 @@
 package com.csa.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import com.csa.entity.Bowl;
 import com.csa.entity.MatchDetails;
 import com.csa.visualization.BattingSegment;
 import com.csa.visualization.InningByInningsResults;
+import com.csa.visualization.Partnership;
 
 public class InningsUtil {
 
@@ -71,6 +73,18 @@ public class InningsUtil {
 
 		inningsFactorSet.setDotBowlToRunsRatio(dotBowlToRunsRatio);
 
+		// set average partnership score
+		Map<Integer, Partnership> partnershipList = getPartnershipList(match
+				.getFirstInnings().getDeliveries());
+		Double averagePartnershipScore = getAvgPartnershipScore(partnershipList);
+		inningsFactorSet.setAvgPartnershipScore(averagePartnershipScore);
+
+		// set batting segments to wickets ratio
+		Double battingSegmentToWicketsRatio = getBattingSegmentsToWicketsRatio(
+				segmentList, match.getFirstInnings().getNumberOfWickets());
+		inningsFactorSet
+				.setBattingSegmentsToWicketsRatio(battingSegmentToWicketsRatio);
+
 		// for first innings
 		int side = match.getResult().getWonByFirstBatOrSecondBat();
 		// team 1 wins
@@ -114,6 +128,12 @@ public class InningsUtil {
 		inningsFactorSet
 				.setAvgPressureFactor(getAvgPressureFactor(segmentList));
 
+		// set batting segments to wickets ratio
+		Double battingSegmentToWicketsRatio = getBattingSegmentsToWicketsRatio(
+				segmentList, match.getSecondInnings().getNumberOfWickets());
+		inningsFactorSet
+				.setBattingSegmentsToWicketsRatio(battingSegmentToWicketsRatio);
+
 		/********************************* segment list **********************************/
 
 		// dot bowl Percentage
@@ -152,6 +172,12 @@ public class InningsUtil {
 
 		// set the win or loose
 		int side = match.getResult().getWonByFirstBatOrSecondBat();
+
+		// set average partnership score
+		Map<Integer, Partnership> partnershipList = getPartnershipList(match
+				.getSecondInnings().getDeliveries());
+		Double averagePartnershipScore = getAvgPartnershipScore(partnershipList);
+		inningsFactorSet.setAvgPartnershipScore(averagePartnershipScore);
 
 		// team 1 wins
 		if (side == 2) {
@@ -341,5 +367,96 @@ public class InningsUtil {
 			int numberOfRuns) {
 		Double dotBowlToRunsRatio = numberOfDots / (numberOfRuns + 0.0);
 		return dotBowlToRunsRatio;
+	}
+
+	public static Map<Integer, Partnership> getPartnershipList(
+			Map<Integer, Bowl> deliveries) {
+
+		Map<Integer, Partnership> partnershipList = new HashMap<Integer, Partnership>();
+
+		int partnershipNumber = 0;
+		int numberOfbowls = 0;
+		int score = 0;
+		Bowl bowl;
+		String bat1name = null;
+		String bat2name = null;
+
+		String currentStriker;
+		String currentNonStriker;
+		for (int i = 1; i <= deliveries.size(); i++) {
+
+			// first bowl
+			bowl = deliveries.get(i);
+
+			currentStriker = bowl.getBatsman();
+			currentNonStriker = bowl.getNonStriker();
+
+			if (i == 1) {
+				bat1name = bowl.getBatsman();
+				bat2name = bowl.getNonStriker();
+			}
+			// if striker or non striker changed
+			if ((currentStriker.equals(bat1name) || currentStriker
+					.equals(bat2name))
+					&& (currentNonStriker.equals(bat1name) || currentNonStriker
+							.equals(bat2name))) {
+				numberOfbowls = numberOfbowls + 1;
+				score = score + bowl.getTotalRuns();
+
+			} else {
+				// wicket is gone or some one out of the field due to an injury
+				Bowl prevBowl = deliveries.get(i - 1);
+				int partnershipRuns = score - prevBowl.getRuns();
+				int partnershipBowls = numberOfbowls - 1;
+
+				Partnership partnership = new Partnership();
+				partnership.setBatsman1(bat1name);
+				partnership.setBatsman2(bat2name);
+
+				partnership.setBowlsFaced(partnershipBowls);
+				partnership.setPartnershipScore(partnershipRuns);
+
+				partnershipNumber++;
+
+				score = bowl.getTotalRuns();
+				numberOfbowls = 1;
+				bat1name = bowl.getBatsman();
+				bat2name = bowl.getNonStriker();
+
+				partnershipList.put(partnershipNumber, partnership);
+			}
+			// if bowl is the last bowl of the innings
+			if (i == deliveries.size()) {
+
+				Partnership partnership = new Partnership();
+				partnership.setBatsman1(bat1name);
+				partnership.setBatsman2(bat2name);
+
+				partnership.setBowlsFaced(score);
+				partnership.setPartnershipScore(numberOfbowls);
+
+				partnershipList.put((partnershipNumber + 1), partnership);
+			}
+		}
+		return partnershipList;
+	}
+
+	public static Double getAvgPartnershipScore(
+			Map<Integer, Partnership> partnershipList) {
+		Double average = 0.0;
+		int totalRuns = 0;
+
+		for (int i = 1; i <= partnershipList.size(); i++) {
+			totalRuns = totalRuns
+					+ partnershipList.get(i).getPartnershipScore();
+		}
+		average = totalRuns / (partnershipList.size() + 0.0);
+		return average;
+	}
+
+	public static Double getBattingSegmentsToWicketsRatio(
+			ArrayList<BattingSegment> segmentList, int numberOfWickets) {
+		Double ratio = segmentList.size() / (numberOfWickets + 1.0);
+		return ratio;
 	}
 }
