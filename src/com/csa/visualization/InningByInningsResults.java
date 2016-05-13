@@ -13,28 +13,36 @@ public class InningByInningsResults {
 	int inningsId;
 	int matchId;
 	int firstInningsOrSecondInnings;
-
+	//
 	// Double dotBallPresentage_1_6;
 	// Double dotBallPresentage_7_15;
 	// Double dotBallPresentage_16_20;
+
 	// Double sixHitingPresentage_1_6;
 	// Double sixHitingPresentage_7_15;
 	// Double sixHitingPresentage_16_20;
+	//
 	// Double fourHitingPresentage_1_6;
 	// Double fourHitingPresentage_7_15;
 	// Double fourHitingPresentage_16_20;
+
 	// Double runRate_1_6;
+	//
 	// Double runRate_7_15;
 	// Double runRate_16_20;
+
+	// int numberOfMadenOvers;
+	Double pressureOfWickets;
+
 	int numberOfBattingSegments;
-	
-	Double avgRunsInBattingSegment; // totalRuns/numberOfSegments
+
+	// Double avgRunsInBattingSegment; // totalRuns/numberOfSegments
 	Double avgMeanRunsInBattingSegment; // (runsInTheSegment/numberOfBowls)+(runsInTheSegment/numberOfBowls)+(runsInTheSegment/numberOfBowls)...
 	Double avgPressureFactor; // runs/dot ball number+1
-	
+
 	Double dotBowlPrerentage;
 	int numberOfWicketsLost;
-	
+
 	Double sixHittingFrequency;
 	Double fourHittingFrequency;
 	Double BoundaryRunsPresentage;
@@ -42,6 +50,27 @@ public class InningByInningsResults {
 	Double avgPartnershipScore;
 	Double battingSegmentsToWicketsRatio;
 	
+	int finalScore;
+	int numberOfExtras;
+
+	public int getFinalScore() {
+		return finalScore;
+	}
+
+	public void setFinalScore(int finalScore) {
+		this.finalScore = finalScore;
+	}
+
+	public int getNumberOfExtras() {
+		return numberOfExtras;
+	}
+
+	public void setNumberOfExtras(int numberOfExtras) {
+		this.numberOfExtras = numberOfExtras;
+	}
+
+	String winOrLoss;
+
 	public Double getBattingSegmentsToWicketsRatio() {
 		return battingSegmentsToWicketsRatio;
 	}
@@ -58,8 +87,6 @@ public class InningByInningsResults {
 	public void setAvgPartnershipScore(Double avgPartnershipScore) {
 		this.avgPartnershipScore = avgPartnershipScore;
 	}
-
-	String winOrLoss;
 
 	public Double getSixHittingFrequency() {
 		return sixHittingFrequency;
@@ -126,14 +153,6 @@ public class InningByInningsResults {
 		this.numberOfBattingSegments = numberOfBattingSegments;
 	}
 
-	public Double getAvgRunsInBattingSegment() {
-		return avgRunsInBattingSegment;
-	}
-
-	public void setAvgRunsInBattingSegment(Double avgRunsInBattingSegment) {
-		this.avgRunsInBattingSegment = avgRunsInBattingSegment;
-	}
-
 	public Double getAvgPressureFactor() {
 		return avgPressureFactor;
 	}
@@ -166,8 +185,23 @@ public class InningByInningsResults {
 		this.winOrLoss = winOrLoss;
 	}
 
+	public int getInningsId() {
+		return inningsId;
+	}
+
+	public void setInningsId(int inningsId) {
+		this.inningsId = inningsId;
+	}
+
+	public Double getPressureOfWickets() {
+		return pressureOfWickets;
+	}
+
+	public void setPressureOfWickets(Double pressureOfWickets) {
+		this.pressureOfWickets = pressureOfWickets;
+	}
+
 	public InningByInningsResults() {
 		// TODO Auto-generated constructor stub
 	}
-
 }

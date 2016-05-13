@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import com.csa.entity.Bowl;
+import com.csa.entity.Innings;
 import com.csa.entity.MatchDetails;
 import com.csa.visualization.BattingSegment;
 import com.csa.visualization.InningByInningsResults;
@@ -24,16 +25,20 @@ public class InningsUtil {
 		ArrayList<BattingSegment> segmentList = getBattingSegmentList(match
 				.getFirstInnings().getDeliveries());
 
+		// set Final Socre of Innings
+		inningsFactorSet.setFinalScore(getNumberOfRunsInInnings(match
+				.getFirstInnings()));
+
+		// set number Of Extras of Innings
+		inningsFactorSet.setNumberOfExtras(getNumberOfExtras(match
+				.getFirstInnings()));
+
 		// set number of batting segments
 		inningsFactorSet.setNumberOfBattingSegments(segmentList.size());
 
 		// set avg mean runs in batting segment
 		inningsFactorSet
 				.setAvgMeanRunsInBattingSegment(getMeanRunsInSegment(segmentList));
-
-		// set avg runs in batting segment
-		inningsFactorSet
-				.setAvgRunsInBattingSegment(getAvgRunsInSegment(segmentList));
 
 		// set avg pressure factor
 		inningsFactorSet
@@ -85,6 +90,10 @@ public class InningsUtil {
 		inningsFactorSet
 				.setBattingSegmentsToWicketsRatio(battingSegmentToWicketsRatio);
 
+		// set Pressure of loosing wickets
+		inningsFactorSet.setPressureOfWickets(getPressureOfLoosingWickets(match
+				.getFirstInnings().getDeliveries()));
+
 		// for first innings
 		int side = match.getResult().getWonByFirstBatOrSecondBat();
 		// team 1 wins
@@ -108,6 +117,14 @@ public class InningsUtil {
 		inningsFactorSet.setMatchId(match.getMatchId());
 		inningsFactorSet.setFirstInningsOrSecondInnings(2);
 
+		// set Final Socre of Innings
+		inningsFactorSet.setFinalScore(getNumberOfRunsInInnings(match
+				.getSecondInnings()));
+
+		// set number Of Extras of Innings
+		inningsFactorSet.setNumberOfExtras(getNumberOfExtras(match
+				.getSecondInnings()));
+
 		/********************************* segment list **********************************/
 
 		ArrayList<BattingSegment> segmentList = getBattingSegmentList(match
@@ -119,10 +136,6 @@ public class InningsUtil {
 		// set avgMean runs in batting segment
 		inningsFactorSet
 				.setAvgMeanRunsInBattingSegment(getMeanRunsInSegment(segmentList));
-
-		// set avg runs in segment
-		inningsFactorSet
-				.setAvgRunsInBattingSegment(getAvgRunsInSegment(segmentList));
 
 		// set avg pressure factor
 		inningsFactorSet
@@ -178,6 +191,10 @@ public class InningsUtil {
 				.getSecondInnings().getDeliveries());
 		Double averagePartnershipScore = getAvgPartnershipScore(partnershipList);
 		inningsFactorSet.setAvgPartnershipScore(averagePartnershipScore);
+
+		// set Pressure of loosing wickets
+		inningsFactorSet.setPressureOfWickets(getPressureOfLoosingWickets(match
+				.getSecondInnings().getDeliveries()));
 
 		// team 1 wins
 		if (side == 2) {
@@ -458,5 +475,57 @@ public class InningsUtil {
 			ArrayList<BattingSegment> segmentList, int numberOfWickets) {
 		Double ratio = segmentList.size() / (numberOfWickets + 1.0);
 		return ratio;
+	}
+
+	public static Double getPressureOfLoosingWickets(
+			Map<Integer, Bowl> deliveries) {
+
+		ArrayList<Integer> wicketBowls = new ArrayList<>();
+
+		// add wicket bowl numbers to array List
+		for (int i = 1; i <= deliveries.size(); i++) {
+			Bowl bowl = deliveries.get(i);
+
+			if (bowl.getIsWicket() == 1) {
+				int bowlNumber = bowl.getBowlnumber();
+				wicketBowls.add(bowlNumber);
+			}
+		}
+		Double pressureOfLoosingWickets = 0.0;
+
+		for (int i = 0; i < wicketBowls.size(); i++) {
+
+			Double factor = 0.0;
+			for (int j = i - 1; j >= 0; j--) {
+				int wicketNumber = j + 1;
+				int bowlGap = wicketBowls.get(i) - wicketBowls.get(j);
+
+				// factor = 0.0 + factor + ((wicketNumber)*(bowlGap + 0.0));
+				factor = factor + bowlGap;
+			}
+
+			pressureOfLoosingWickets = pressureOfLoosingWickets + factor;
+		}
+		return pressureOfLoosingWickets;
+	}
+
+	public static int getNumberOfRunsInInnings(Innings innings) {
+
+		Map<Integer, Bowl> deliveries = innings.getDeliveries();
+		int numberOfRuns = 0;
+		for (int i = 1; i <= deliveries.size(); i++) {
+			numberOfRuns = numberOfRuns + deliveries.get(i).getTotalRuns();
+		}
+		return numberOfRuns;
+	}
+
+	public static int getNumberOfExtras(Innings innings) {
+
+		Map<Integer, Bowl> deliveries = innings.getDeliveries();
+		int numberOfExtras = 0;
+		for (int i = 1; i <= deliveries.size(); i++) {
+			numberOfExtras = numberOfExtras + deliveries.get(i).getExtras();
+		}
+		return numberOfExtras;
 	}
 }

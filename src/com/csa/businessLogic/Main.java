@@ -1,6 +1,7 @@
 package com.csa.businessLogic;
 
 import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class Main {
 				.buildSessionFactory();
 		Session session = sessionFactory.openSession();
 
-		for (int j = 335982; j <= 980915; j++) {
+		for (int j = 335982; j <= 829823; j++) {
 			String filepath = "resources/ipl/" + j + ".yaml";
 
 			File file = null;
@@ -187,6 +188,7 @@ public class Main {
 				}
 				//innings Results visualization
 				inningResults = InningsUtil.generateInningsByInningsResultsFirstInnings(match);
+				
 				session.save(inningResults);
 				
 				inningResults = InningsUtil.generateInningsByInningsResultsSecondInnings(match);
